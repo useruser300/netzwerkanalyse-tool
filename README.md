@@ -132,9 +132,9 @@ Bitte gib uns Feedback zu folgenden Punkten:
 
 Das Tool steht als **Release auf GitHub** zur Verfügung:
 
-🔗 **[→ Zum GitHub Release](https://github.com/useruser300/Netzwerkanalyse/releases)**
+🔗 **[→ Zum GitHub Release](https://github.com/useruser300/netzwerkanalyse-tool/releases)**
 
-🔹 **Testdaten für das Tool findest du im Repository unter [`datasets-testen`](https://github.com/useruser300/Netzwerkanalyse/tree/main/datasets-testen)**
+🔹 **Testdaten für das Tool findest du im Repository unter [`datasets-testen`](https://github.com/useruser300/netzwerkanalyse-tool/tree/main/datasets-testen)**
 
 ➡️ Diese Daten kannst du nutzen, um die Analyse- und Visualisierungsfunktionen auszuprobieren.
 
