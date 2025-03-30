@@ -1,0 +1,166 @@
+name: Build Executables
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write 
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest] 
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Debugging Prüfe start.py
+        run: ls -l start.py || echo "start.py nicht gefunden!"
+
+      - name: Debugging Prüfe PyInstaller
+        run: |
+          python --version
+          pip show pyinstaller || echo "PyInstaller nicht installiert!"
+
+      - name: Build Executable
+        run: |
+          pyinstaller --onefile --windowed --name netzwerkanalyse-${{ runner.os }} start.py
+
+      - name: Debugging Zeige Inhalt von dist/
+        run: ls -l dist/ || echo "Kein Output gefunden in dist/"
+
+      - name: Release Build
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+          tag_name: latest
+          draft: false
+          prerelease: false
+          body: |
+            # Netzwerkanalyse Tool – Builds & Hinweise
+
+            Hier findest du die neuesten Builds für **Windows**, **macOS** und **Linux**.
+            
+            🔹 **Testdaten für das Tool findest du im Repository unter [`datasets-testen`](https://github.com/useruser300/Netzwerkanalyse/tree/main/datasets-testen)**
+            
+            ---
+
+            ## Systemkompatibilität – bitte vor dem Download beachten
+
+            | Betriebssystem | Unterstützt | Nicht kompatibel |
+            |----------------|-------------|------------------|
+            | 🐧 **Linux**   | ✅ x86-64 Architektur (z. B. Intel i5, i7, i9) | ❌ ARM-basierte Systeme (z. B. Raspberry Pi, ARM64-Server) |
+            | 🍎 **macOS**   | ✅ Apple Silicon (ARM64 – M1, M2, M3)           | ❌ Intel-basierte Macs |
+            | 🪟 **Windows** | ✅ Windows mit x86-64 Architektur               | ⚠️ ARM-Windows wird aktuell nicht unterstützt |
+
+            ---
+
+            ## Erste Schritte & mögliche Fehlermeldungen
+
+            Je nach Betriebssystem kann es beim ersten Start zu Warnungen oder Problemen kommen. Hier findest du einfache Lösungen:
+
+            ---
+
+            ### 🐧 **Linux – Datei wird nicht erkannt**
+
+            **Fehlermeldung:**  
+            `Could Not Display ‘netzwerkanalyse-Linux’ – There is no app installed for ‘Executable’ files`
+
+            **Ursache:** Die Datei wurde nicht automatisch als ausführbar erkannt.
+
+            #### Lösung:
+
+            1. **Terminal öffnen**  
+            2. In den Ordner mit der Datei wechseln (z. B. Downloads):  
+               ```bash
+               cd ~/Downloads
+               ```
+
+            3. Datei ausführbar machen:  
+               ```bash
+               chmod +x netzwerkanalyse-Linux
+               ```
+
+            4. Programm starten:  
+               ```bash
+               ./netzwerkanalyse-Linux
+               ```
+
+            ---
+
+            ### 🍎 **macOS – Datei kann nicht geöffnet werden**
+
+            **Fehlermeldung:**  
+            `“netzwerkanalyse-macOS” can’t be opened because Apple cannot check it for malicious software.`
+
+            **Ursache:** macOS blockiert neue, nicht verifizierte Apps.
+
+            #### Lösung:
+
+            1. **Terminal öffnen**  
+            2. In den Ordner mit der Datei wechseln (z. B. Downloads):  
+               ```bash
+               cd ~/Downloads
+               ```
+
+            3. Datei ausführbar machen:  
+               ```bash
+               chmod +x netzwerkanalyse-macOS
+               ```
+
+            4. Sicherheitsbeschränkung entfernen:  
+               ```bash
+               xattr -d com.apple.quarantine netzwerkanalyse-macOS
+               ```
+
+            5. Programm starten:  
+               ```bash
+               ./netzwerkanalyse-macOS
+               ```
+
+            ---
+
+            ### 🪟 **Windows – SmartScreen-Warnung**
+
+            **Fehlermeldung:**  
+            `“netzwerkanalyse-Windows.exe isn’t commonly downloaded”`
+
+            **Ursache:** Die Datei ist neu und nicht signiert, daher zeigt Windows eine Schutzmeldung.
+
+            #### Lösung:
+
+            1. Klicke auf **„Mehr anzeigen“ (See more)**  
+            2. Klicke auf **„Behalten“ (Keep)**  
+            3. **Rechtsklick auf die Datei → Eigenschaften**  
+            4. Setze (falls sichtbar) den Haken bei **„Zulassen“**, dann auf **OK** klicken  
+            5. **Doppelklick**, um die Datei zu starten
+
+            🔧 **Wenn die Datei trotzdem blockiert wird:**
+
+            1. Rechtsklick auf die Datei → **„Als Administrator ausführen“**  
+            2. Wenn Windows fragt: **„Möchten Sie diese App ausführen?“ → Ja**
+
+            ---
+
+            Viel Spaß beim Testen – und danke für dein Feedback!  
+            ➡️ Gib dein Feedback hier ab: [Feedback-Seite öffnen](https://umfragen.tu-dortmund.de/index.php/614683?lang=de)  
+            Bei Fragen oder Fehlern gerne per Mail an: [ali.almazaal@gmail.com](ali.almazaal@gmail.com)
