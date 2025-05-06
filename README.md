@@ -22,7 +22,7 @@ Es kombiniert eine **benutzerfreundliche grafische Oberfläche (GUI)** mit bewä
 
 > ⚠️ **Hinweis:**  
 > Das Tool ist **noch nicht vollständig implementiert**.  
-> Funktionen in der Toolbar (wie JSON/PDF-Export) sind **derzeit Platzhalter**.  
+> Funktionen in der Toolbar (wie JSON/PDF-Export) sind **derzeit Platzhalter** und nur teilweise funktionieren.  
 > Die Entwicklung konzentrierte sich auf die **Kernfunktionen**.
 
 ---
